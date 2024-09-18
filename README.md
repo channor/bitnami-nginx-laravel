@@ -4,6 +4,10 @@ Nginx packaged by bitnami. Steps to deploy a laravel app.
 
 ## Make server ready
 
+The server comes ready with PHP, MariaDB, Nginx, Git and Composer.
+
+When you have created a new Lightsail Nginx by Bitnami instance, do the following steps.
+
 ### Initial script
 
 ```bash
@@ -130,38 +134,46 @@ sudo /opt/bitnami/bncert-tool
 
 ### Create Nginx conf file
 
-The following conf file redirects to HTTPS and redirects www to non-www. Replace server_name, paths to SSL and root of you projects public folder.
+Create a new nginx conf for your laravel site. Name it for example `subdomain-domain-com.conf` 
+The following conf file redirects to HTTPS and redirects www to non-www. Replace server_name, 
+paths to SSL and root of you projects public folder.
+
+Create the conf-file and paste and edit the configuration below.
+
+```bash
+sudo nano /opt/bitnami/nginx/conf/server_blocks/subdomain-domain-com.conf
+```
 
 ```apacheconf
-# Redirect all HTTP traffic for your-domain.com to HTTPS
+# Redirect all HTTP traffic for your.domain.com to HTTPS
 server {
     listen 80;
     listen [::]:80;
-    server_name your-domain.com;
+    server_name your.domain.com;
 
     # Redirect all HTTP requests to HTTPS
-    return 301 https://your-domain.com$request_uri;
+    return 301 https://your.domain.com$request_uri;
 }
 
-# Redirect all HTTP traffic for www.your-domain.com to HTTPS
+# Redirect all HTTP traffic for www.your.domain.com to HTTPS
 server {
     listen 80;
     listen [::]:80;
-    server_name www.your-domain.com;
+    server_name www.your.domain.com;
 
     # Redirect all HTTP requests to HTTPS
-    return 301 https://your-domain.com$request_uri;
+    return 301 https://your.domain.com$request_uri;
 }
 
-# HTTPS server block for your-domain.com
+# HTTPS server block for your.domain.com
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
     http2 on;
-    server_name your-domain.com;
+    server_name your.domain.com;
 
-    ssl_certificate /opt/bitnami/nginx/conf/your-domain.com.crt;
-    ssl_certificate_key /opt/bitnami/nginx/conf/your-domain.com.key;
+    ssl_certificate /opt/bitnami/nginx/conf/your.domain.com.crt;
+    ssl_certificate_key /opt/bitnami/nginx/conf/your.domain.com.key;
 
     root /opt/bitnami/projects/laravel-root/public;
 
@@ -193,16 +205,28 @@ server {
     }
 }
 
-# HTTPS server block for www.your-domain.com
+# HTTPS server block for www.your.domain.com
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
     http2 on;
-    server_name www.your-domain.com;
+    server_name www.your.domain.com;
 
-    ssl_certificate /opt/bitnami/nginx/conf/your-domain.com.crt;
-    ssl_certificate_key /opt/bitnami/nginx/conf/your-domain.com.key;
+    ssl_certificate /opt/bitnami/nginx/conf/your.domain.com.crt;
+    ssl_certificate_key /opt/bitnami/nginx/conf/your.domain.com.key;
 
-    return 301 https://your-domain.com$request_uri;
+    return 301 https://your.domain.com$request_uri;
 }
 ```
+
+Restart system
+
+```bash
+sudo /opt/bitnami/ctlscript.sh restart
+```
+
+## Paths to various files
+
+- **Main nginx conf**: `/opt/bitnami/nginx/conf/nginx.conf`
+- **Bitnami conf folder**: `/opt/bitnami/nginx/conf/bitnami/`
+- **Server block included in nginx.conf http block**: `/opt/bitnami/nginx/conf/server_blocks/`
