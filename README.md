@@ -225,7 +225,46 @@ Restart system
 sudo /opt/bitnami/ctlscript.sh restart
 ```
 
-## Paths to various files
+## Testing and staging
+
+It's always nice to test the new commits in a staging environment before pulling the changes to production.
+
+1. Do the same steps as in [Set up a new Laravel site](#set-up-a-new-laravel-site).
+2. Open your local hosts file and add `120.0.0.1 your-domain.test`
+3. Use the same server block as above.
+
+### Restrict to SSH and local host access only
+
+If you want, make access to the staging environment only accessable from 120.0.0.1 host through SSH tunnel.
+
+1. Add restriction to the conf-file:
+
+```apacheconf
+if ($remote_addr != 127.0.0.1) {
+  return 403 'For security reasons, this URL is only accessible using localhost (127.0.0.1) as the hostname.';
+}
+```
+
+2. Add self-signed SSL-certificate
+
+```apacheconf
+ssl_certificate /opt/bitnami/nginx/conf/bitnami/certs/server.crt;
+ssl_certificate_key /opt/bitnami/nginx/conf/bitnami/certs/server.key;
+```
+
+3. Set up SSH tunnel
+
+```bash
+ssh -N -L 443:127.0.0.1:443 -i lightsail.pem bitnami@<instance-public-ip>
+```
+
+or the following for http://
+
+```bash
+ssh -N -L 8888:127.0.0.1:80 -i lightsail.pem bitnami@<instance-public-ip>
+```
+
+## Paths that is commonly used
 
 - **Main nginx conf**: `/opt/bitnami/nginx/conf/nginx.conf`
 - **Bitnami conf folder**: `/opt/bitnami/nginx/conf/bitnami/`
