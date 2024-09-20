@@ -231,6 +231,15 @@ When changes has been pushed to your repository, pull the changes to your server
 
 ```bash
 git pull
+sudo chown -R bitnami:daemon .
+find . -type d -exec chmod 755 {} \;
+find . -type f -exec chmod 644 {} \;
+chmod -R 775 storage bootstrap/cache
+chmod +x artisan
+chmod 640 .env
+```
+
+```bash
 bash <(curl -s https://raw.githubusercontent.com/channor/bitnami-nginx-laravel/main/deploy.sh)
 ```
 
