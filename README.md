@@ -225,6 +225,14 @@ Restart system
 sudo /opt/bitnami/ctlscript.sh restart
 ```
 
+### Deploy changes
+
+When changes has been pushed to your repository, pull the changes to your server:
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/channor/bitnami-nginx-laravel/main/deploy.sh)
+```
+
 ## Testing and staging
 
 It's always nice to test the new commits in a staging environment before pulling the changes to production.
