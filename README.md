@@ -11,7 +11,7 @@ When you have created a new Lightsail Nginx by Bitnami instance, do the followin
 ### Initial script
 
 ```bash
-sudo apt update && apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
 
 ### Setup SSH with GitHub
