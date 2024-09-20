@@ -230,6 +230,7 @@ sudo /opt/bitnami/ctlscript.sh restart
 When changes has been pushed to your repository, pull the changes to your server:
 
 ```bash
+git pull
 bash <(curl -s https://raw.githubusercontent.com/channor/bitnami-nginx-laravel/main/deploy.sh)
 ```
 
